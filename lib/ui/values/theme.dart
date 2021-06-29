@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/ui/values/values.dart';
+
+import '../../ui/values/values.dart';
 
 abstract class Theme {
   static ThemeData get primary {
