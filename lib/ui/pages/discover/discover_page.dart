@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../../domain/entities/entities.dart';
+
 import '../../values/values.dart';
 import '../../widgets/widgets.dart';
 
 import 'widgets/widgets.dart';
+import 'discover_state.dart';
 import 'discover_presenter.dart';
 
 class DiscoverPage extends StatefulWidget {
@@ -33,6 +36,12 @@ class _DiscoverPageState extends State<DiscoverPage> {
     if (!currentFocus.hasPrimaryFocus) {
       currentFocus.unfocus();
     }
+  }
+
+  @override
+  void dispose() {
+    presenter?.dispose();
+    super.dispose();
   }
 
   @override
@@ -125,29 +134,50 @@ class _DiscoverPageState extends State<DiscoverPage> {
   Widget _body(BuildContext context) {
     var isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
 
-    return StreamBuilder<bool>(
-      initialData: false,
-      stream: presenter?.isLoading,
+    return StreamBuilder<DiscoverState>(
+      initialData: DiscoverLoadingState(),
+      stream: presenter?.discoverScreenState,
       builder: (context, snapshot) {
-        final isLoading = snapshot.data!;
+        final currentState = snapshot.data!;
 
-        if (isLoading) {
-          return _loadingWidget();
+        if (currentState is DiscoverErrorState || snapshot.hasError) {
+          return Container(); // TODO: implements error screen
         }
 
-        return AnimatedOpacity(
-          duration: Duration(milliseconds: 500),
-          opacity: isKeyboardVisible ? 0 : 1,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const VerticalSpacing(24),
-              _recentPlayedMusics(),
-              const VerticalSpacing(40),
-              _mostPlayed(),
-            ],
-          ),
-        );
+        if (currentState is DiscoverSuccessState) {
+          final listOfRecentPlayedMusics = currentState.listOfRecentMusics;
+          final listOfMostPlayedMusics = currentState.listOfMostPlayedMusics;
+
+          return AnimatedOpacity(
+            duration: Duration(milliseconds: 500),
+            opacity: isKeyboardVisible ? 0 : 1,
+            onEnd: () {
+              presenter?.onEndCurrentOpacityTransition(isKeyboardVisible);
+            },
+            child: StreamBuilder<bool>(
+              stream: presenter?.opacityIsNotDisplayingBody,
+              initialData: false,
+              builder: (context, snapshot) {
+                final opacityIsNotDisplayingBody = snapshot.data ?? false;
+
+                return Visibility(
+                  visible: !opacityIsNotDisplayingBody,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const VerticalSpacing(24),
+                      _recentPlayedMusicsSection(listOfRecentPlayedMusics),
+                      const VerticalSpacing(40),
+                      _mostPlayedMusicsSection(listOfMostPlayedMusics),
+                    ],
+                  ),
+                );
+              },
+            ),
+          );
+        }
+
+        return _loadingWidget();
       },
     );
   }
@@ -162,20 +192,23 @@ class _DiscoverPageState extends State<DiscoverPage> {
     );
   }
 
-  Widget _recentPlayedMusics() {
+  Widget _recentPlayedMusicsSection(
+      List<MusicEntity> listOfRecentPlayedMusics) {
     return Container(
       height: 230,
       child: ListView.separated(
         physics: BouncingScrollPhysics(),
         padding: const EdgeInsets.symmetric(horizontal: 24),
         scrollDirection: Axis.horizontal,
-        itemCount: 2,
+        itemCount: listOfRecentPlayedMusics.length,
         separatorBuilder: (_, __) => const HorizontalSpacing(8),
         itemBuilder: (context, index) {
+          final currentMusic = listOfRecentPlayedMusics[index];
+
           return RecentPlayedMusicItem(
-            imagePath: '',
-            musicName: 'Making A Fire',
-            bandName: 'Foo Fighter',
+            imagePath: currentMusic.imagePath,
+            musicName: currentMusic.musicName,
+            bandName: currentMusic.bandName,
             onLongPressed: () {
               print('called');
             },
@@ -185,14 +218,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
     );
   }
 
-  Widget _mostPlayed() {
-    final itemCount = 4;
-
-    final sizeOfXAxisMultipliedByItemSize =
-        ((itemCount / 2.0).roundToDouble() * 188);
-    final sizeOfItemSpacingMultipliedByMainAxisSpacing =
-        ((itemCount + 1 / 2.0) * 16);
-
+  Widget _mostPlayedMusicsSection(List<MusicEntity> listOfMostPlayedMusics) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
@@ -203,29 +229,43 @@ class _DiscoverPageState extends State<DiscoverPage> {
             style: TextStyles.medium(),
           ),
           const VerticalSpacing(24),
-          Container(
-            height: sizeOfXAxisMultipliedByItemSize +
-                sizeOfItemSpacingMultipliedByMainAxisSpacing,
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 160 / 188,
-                crossAxisSpacing: 8,
-                mainAxisSpacing: 16,
-              ),
-              padding: EdgeInsets.zero,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: itemCount,
-              itemBuilder: (context, index) {
-                return MostPlayedMusicItem(
-                  bandName: "Ain't Fun",
-                  musicName: " Paramore",
-                );
-              },
-            ),
-          ),
+          _listOfMostPlayed(listOfMostPlayedMusics),
           const VerticalSpacing(24),
         ],
+      ),
+    );
+  }
+
+  Widget _listOfMostPlayed(List<MusicEntity> listOfMostPlayedMusics) {
+    final itemCount = listOfMostPlayedMusics.length;
+
+    final sizeOfXAxisMultipliedByItemSize =
+        ((itemCount / 2.0).roundToDouble() * 188);
+    final sizeOfItemSpacingMultipliedByMainAxisSpacing =
+        ((itemCount + 1 / 2.0) * 16);
+
+    return Container(
+      height: sizeOfXAxisMultipliedByItemSize +
+          sizeOfItemSpacingMultipliedByMainAxisSpacing,
+      child: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 160 / 188,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 16,
+        ),
+        padding: EdgeInsets.zero,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: itemCount,
+        itemBuilder: (context, index) {
+          final currentMusic = listOfMostPlayedMusics[index];
+
+          return MostPlayedMusicItem(
+            imagePath: currentMusic.imagePath,
+            musicName: currentMusic.musicName,
+            bandName: currentMusic.bandName,
+          );
+        },
       ),
     );
   }

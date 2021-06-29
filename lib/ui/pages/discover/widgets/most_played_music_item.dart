@@ -6,9 +6,11 @@ import '../../../../ui/widgets/widgets.dart';
 class MostPlayedMusicItem extends StatelessWidget {
   final String bandName;
   final String musicName;
+  final String imagePath;
 
   MostPlayedMusicItem({
     Key? key,
+    required this.imagePath,
     required this.bandName,
     required this.musicName,
   }) : super(key: key);
