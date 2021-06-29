@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../values/values.dart';
 import '../../widgets/widgets.dart';
 
+import 'widgets/widgets.dart';
 import 'discover_presenter.dart';
 
 class DiscoverPage extends StatefulWidget {
@@ -171,13 +172,13 @@ class _DiscoverPageState extends State<DiscoverPage> {
         itemCount: 2,
         separatorBuilder: (_, __) => const HorizontalSpacing(8),
         itemBuilder: (context, index) {
-          return Container(
-            height: 230,
-            width: 208,
-            decoration: BoxDecoration(
-              color: Colors.red,
-              borderRadius: BorderRadius.circular(8),
-            ),
+          return RecentPlayedMusicItem(
+            imagePath: '',
+            musicName: 'Making A Fire',
+            bandName: 'Foo Fighter',
+            onLongPressed: () {
+              print('called');
+            },
           );
         },
       ),
@@ -216,30 +217,9 @@ class _DiscoverPageState extends State<DiscoverPage> {
               physics: NeverScrollableScrollPhysics(),
               itemCount: itemCount,
               itemBuilder: (context, index) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: 160,
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    const VerticalSpacing(8),
-                    RichText(
-                      text: TextSpan(
-                        text: "Ain't Fun ",
-                        style: TextStyles.body(),
-                        children: [
-                          TextSpan(
-                            text: 'Paramore',
-                            style: TextStyles.bodyRegular(),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                return MostPlayedMusicItem(
+                  bandName: "Ain't Fun",
+                  musicName: " Paramore",
                 );
               },
             ),
@@ -255,21 +235,12 @@ class _DiscoverPageState extends State<DiscoverPage> {
       bottom: 0,
       left: 0,
       right: 0,
-      child: IgnorePointer(
-        ignoring: true,
-        child: Container(
-          height: 160,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Colors.transparent,
-                KColors.lightBlack,
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-          ),
-        ),
+      child: const FooterBoxShadow(
+        heigth: 160,
+        colors: [
+          Colors.transparent,
+          KColors.lightBlack,
+        ],
       ),
     );
   }
