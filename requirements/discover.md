@@ -6,8 +6,8 @@
 
 3. A transição de tela deve ser do tipo "Container Transform Animation";
 
-4. Ao focar no input de busca, os thumbs de música devem sumir em fade out, deixando visível apenas o input e a AppBar;
+4. ✅ Ao focar no input de busca, os thumbs de música devem sumir em fade out, deixando visível apenas o input e a AppBar;
 
-5. Ao tocar fora do input (blur) ou submeter a busca, os thumbs de música devem voltar a aparecer em fade in;
+5. ✅ Ao tocar fora do input (blur) ou submeter a busca, os thumbs de música devem voltar a aparecer em fade in;
 
-6. O back button não tem funcionalidade. Logo, nada deve acontecer ao pressioná-lo.
+6. ✅ O back button não tem funcionalidade. Logo, nada deve acontecer ao pressioná-lo.

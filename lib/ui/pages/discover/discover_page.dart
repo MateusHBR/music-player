@@ -26,28 +26,39 @@ class _DiscoverPageState extends State<DiscoverPage> {
     presenter?.loadMusics();
   }
 
+  void _hideKeyboard() {
+    final currentFocus = FocusScope.of(context);
+
+    if (!currentFocus.hasPrimaryFocus) {
+      currentFocus.unfocus();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: KColors.blue,
-      appBar: _customAppBar(),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              KColors.blue,
-              KColors.blueDark,
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+    return GestureDetector(
+      onTap: _hideKeyboard,
+      child: Scaffold(
+        backgroundColor: KColors.blue,
+        appBar: _customAppBar(),
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                KColors.blue,
+                KColors.blueDark,
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
           ),
-        ),
-        child: ListView(
-          physics: BouncingScrollPhysics(),
-          children: [
-            _header(),
-            _body(context),
-          ],
+          child: ListView(
+            physics: BouncingScrollPhysics(),
+            children: [
+              _header(),
+              _body(context),
+            ],
+          ),
         ),
       ),
     );
