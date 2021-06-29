@@ -41,24 +41,29 @@ class _DiscoverPageState extends State<DiscoverPage> {
       child: Scaffold(
         backgroundColor: KColors.blue,
         appBar: _customAppBar(),
-        body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                KColors.blue,
-                KColors.blueDark,
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
+        body: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    KColors.blue,
+                    KColors.blueDark,
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+              child: ListView(
+                physics: BouncingScrollPhysics(),
+                children: [
+                  _header(),
+                  _body(context),
+                ],
+              ),
             ),
-          ),
-          child: ListView(
-            physics: BouncingScrollPhysics(),
-            children: [
-              _header(),
-              _body(context),
-            ],
-          ),
+            _footerPositionedBoxShadow(),
+          ],
         ),
       ),
     );
@@ -241,6 +246,30 @@ class _DiscoverPageState extends State<DiscoverPage> {
           ),
           const VerticalSpacing(24),
         ],
+      ),
+    );
+  }
+
+  Widget _footerPositionedBoxShadow() {
+    return Positioned(
+      bottom: 0,
+      left: 0,
+      right: 0,
+      child: IgnorePointer(
+        ignoring: true,
+        child: Container(
+          height: 160,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Colors.transparent,
+                KColors.lightBlack,
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+        ),
       ),
     );
   }
