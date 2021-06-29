@@ -1,4 +1,5 @@
 import 'package:mocktail/mocktail.dart';
+import 'package:music_player/domain/helpers/helpers.dart';
 import 'package:test/test.dart';
 
 import 'package:music_player/data/cache/cache.dart';
@@ -44,6 +45,10 @@ void main() {
     mockRecentPlayedMusics().thenAnswer((invocation) async => loadedMusicsMock);
   }
 
+  void mockRecentPlayedMusicsError() {
+    mockRecentPlayedMusics().thenThrow(Exception());
+  }
+
   test('should load recent played musics', () async {
     mockRecentPlayedMusicsSuccess();
 
@@ -53,5 +58,13 @@ void main() {
       recentPlayedMusics,
       loadedMusicsMock.map((music) => music.toEntity()).toList(),
     );
+  });
+
+  test('should throw Unexpected error if music cache throws', () async {
+    mockRecentPlayedMusicsError();
+
+    final future = sut.call();
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
