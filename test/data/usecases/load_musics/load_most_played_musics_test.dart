@@ -1,9 +1,11 @@
 import 'package:mocktail/mocktail.dart';
-import 'package:music_player/data/models/models.dart';
 import 'package:test/test.dart';
 
 import 'package:music_player/data/cache/cache.dart';
+import 'package:music_player/data/models/models.dart';
 import 'package:music_player/data/usecases/usecases.dart';
+
+import 'package:music_player/domain/helpers/domain_error.dart';
 
 class GetMusicsFromCacheStorageSpy extends Mock
     implements GetMusicsFromCacheStorage {}
@@ -45,6 +47,10 @@ void main() {
     );
   }
 
+  void mockMostPlayerMusicsError() {
+    mockMostPlayedMusics().thenThrow(Exception());
+  }
+
   test('should load most player musics', () async {
     mockMostPlayerMusicsSuccess();
 
@@ -54,5 +60,13 @@ void main() {
       musics,
       loadedMusicsMock.map((music) => music.toEntity()).toList(),
     );
+  });
+
+  test('should throw Unexpected error if music cache throws', () async {
+    mockMostPlayerMusicsError();
+
+    final future = sut.call();
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
