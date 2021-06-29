@@ -1,4 +1,6 @@
-class MusicEntity {
+import 'package:equatable/equatable.dart';
+
+class MusicEntity extends Equatable {
   final String musicPath;
   final String imagePath;
   final String musicName;
@@ -10,4 +12,12 @@ class MusicEntity {
     required this.musicName,
     required this.bandName,
   });
+
+  @override
+  List<Object?> get props => [
+        musicPath,
+        imagePath,
+        musicName,
+        bandName,
+      ];
 }
