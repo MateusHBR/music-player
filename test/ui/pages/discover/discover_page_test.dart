@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:music_player/domain/entities/entities.dart';
 
 import 'package:music_player/ui/pages/discover/discover.dart';
 import 'package:music_player/ui/widgets/widgets.dart';
@@ -153,5 +154,56 @@ void main() {
     addTearDown(() {
       verify(() => presenter.dispose()).called(1);
     });
+  });
+
+  testWidgets(
+      'should load the correct items when presenter emits  discoverSuccessState',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    final listOfMostPlayed = [
+      MusicEntity(
+        bandName: 'Paramore',
+        musicName: "Ain't Fun",
+        imagePath: '/path/Paramore/image1',
+        musicPath: '/path/Paramore/music1',
+      ),
+      MusicEntity(
+        bandName: 'Draft Punk',
+        musicName: "Get Lucky",
+        imagePath: '/path/DraftPunk/image1',
+        musicPath: '/path/DraftPunk/music1',
+      ),
+    ];
+
+    final listOfRecentPlayed = [
+      MusicEntity(
+        bandName: 'Paramore',
+        musicName: "Ain't Fun",
+        imagePath: '/path/Paramore/image1',
+        musicPath: '/path/Paramore/music1',
+      ),
+    ];
+
+    discoverScreenStateController.add(
+      DiscoverSuccessState(
+        listOfMostPlayedMusics: listOfMostPlayed,
+        listOfRecentMusics: listOfRecentPlayed,
+      ),
+    );
+
+    await tester.pump();
+
+    final circularProgressIndicator = find.byType(CircularProgressIndicator);
+
+    expect(circularProgressIndicator, findsNothing);
+
+    final recentPlayedMusicsItem = find.byType(RecentPlayedMusicItem);
+
+    expect(recentPlayedMusicsItem, findsNWidgets(1));
+
+    final mostPlayedMusicsItem = find.byType(MostPlayedMusicItem);
+
+    expect(mostPlayedMusicsItem, findsNWidgets(2));
   });
 }
