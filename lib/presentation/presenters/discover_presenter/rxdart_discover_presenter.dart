@@ -1,4 +1,9 @@
+import 'package:rxdart/rxdart.dart';
+
 import '../../../data/usecases/usecases.dart';
+
+import '../../../domain/helpers/helpers.dart';
+
 import '../../../ui/pages/discover/discover.dart';
 
 class RxDartDiscoverPresenter implements DiscoverPresenter {
@@ -10,13 +15,16 @@ class RxDartDiscoverPresenter implements DiscoverPresenter {
     required this.loadRecentPlayedMusicsUseCase,
   });
 
+  final _discoverScreenState = BehaviorSubject<DiscoverState>.seeded(
+    DiscoverLoadingState(),
+  );
+
   @override
-  // TODO: implement discoverScreenState
-  Stream<DiscoverState> get discoverScreenState => throw UnimplementedError();
+  Stream<DiscoverState> get discoverScreenState => _discoverScreenState;
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    _discoverScreenState.close();
   }
 
   @override
@@ -25,8 +33,12 @@ class RxDartDiscoverPresenter implements DiscoverPresenter {
 
   @override
   Future<void> loadMusics() async {
-    await loadRecentPlayedMusicsUseCase();
-    await loadMostPlayedMusicsUseCase();
+    try {
+      await loadRecentPlayedMusicsUseCase();
+      await loadMostPlayedMusicsUseCase();
+    } on DomainError catch (error) {
+      _discoverScreenState.add(DiscoverErrorState());
+    }
   }
 
   @override
