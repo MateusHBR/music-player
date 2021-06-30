@@ -111,4 +111,21 @@ void main() {
       ),
     );
   });
+  test(
+      'should emits error state and error message when loadRecentPlayedMusicsUseCase throws',
+      () async {
+    loadRecentPlayedMusicsError();
+
+    await sut.loadMusics();
+
+    sut.discoverScreenState.listen(
+      expectAsync1(
+        (newState) {
+          final currentStateIsError = newState is DiscoverErrorState;
+
+          expect(currentStateIsError, true);
+        },
+      ),
+    );
+  });
 }
