@@ -159,4 +159,17 @@ void main() {
 
     await sut.loadMusics();
   });
+
+  test(
+      'should emit events when onEndCurrentOpacityTransition be called with new values',
+      () {
+    expectLater(sut.opacityIsNotDisplayingBody, emitsInOrder([true, false]));
+    bool isKeyboardVisible = true;
+
+    sut.onEndCurrentOpacityTransition(isKeyboardVisible);
+
+    isKeyboardVisible = false;
+
+    sut.onEndCurrentOpacityTransition(isKeyboardVisible);
+  });
 }

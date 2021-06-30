@@ -21,7 +21,7 @@ class RxDartDiscoverPresenter implements DiscoverPresenter {
 
   final _errorMessageStream = PublishSubject<String?>();
 
-  final _opacityIsNotDisplayingBodyStream = PublishSubject<bool>();
+  final _onEndOpacityTransitionStream = PublishSubject<bool>();
 
   @override
   Stream<DiscoverState> get discoverScreenState =>
@@ -31,7 +31,7 @@ class RxDartDiscoverPresenter implements DiscoverPresenter {
   void dispose() {
     _discoverScreenStateStream.close();
     _errorMessageStream.close();
-    _opacityIsNotDisplayingBodyStream.close();
+    _onEndOpacityTransitionStream.close();
   }
 
   @override
@@ -58,10 +58,9 @@ class RxDartDiscoverPresenter implements DiscoverPresenter {
 
   @override
   void onEndCurrentOpacityTransition(bool isKeyboardVisible) {
-    // TODO: implement onEndCurrentOpacityTransition
+    _onEndOpacityTransitionStream.add(isKeyboardVisible);
   }
 
   @override
-  // TODO: implement opacityIsNotDisplayingBody
-  Stream<bool> get opacityIsNotDisplayingBody => throw UnimplementedError();
+  Stream<bool> get opacityIsNotDisplayingBody => _onEndOpacityTransitionStream;
 }
