@@ -1,6 +1,6 @@
 # Discover 
 
-1. Ao abrir o app, deve-se listar os elementos especificados no layout;
+1. ✅ Ao abrir o app, deve-se listar os elementos especificados no layout;
 
 2. Ao pressionar o thumb de uma música, o usuário deve ser levado à tela de player;
 

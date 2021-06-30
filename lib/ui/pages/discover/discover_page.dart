@@ -141,6 +141,10 @@ class _DiscoverPageState extends State<DiscoverPage> {
   Widget _body(BuildContext context) {
     var isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
 
+    if (!isKeyboardVisible) {
+      presenter.onEndCurrentOpacityTransition(isKeyboardVisible);
+    }
+
     return StreamBuilder<DiscoverState>(
       initialData: DiscoverLoadingState(),
       stream: presenter.discoverScreenState,
@@ -160,7 +164,9 @@ class _DiscoverPageState extends State<DiscoverPage> {
             duration: Duration(milliseconds: 500),
             opacity: isKeyboardVisible ? 0 : 1,
             onEnd: () {
-              presenter.onEndCurrentOpacityTransition(isKeyboardVisible);
+              if (isKeyboardVisible) {
+                presenter.onEndCurrentOpacityTransition(isKeyboardVisible);
+              }
             },
             child: StreamBuilder<bool>(
               stream: presenter.opacityIsNotDisplayingBody,
