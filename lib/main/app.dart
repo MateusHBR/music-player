@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../ui/pages/discover/discover_page.dart';
 import '../ui/values/values.dart' as values;
+
+import 'factories/factories.dart';
 
 class App extends StatelessWidget {
   @override
@@ -11,7 +12,7 @@ class App extends StatelessWidget {
       theme: values.Theme.primary,
       initialRoute: '/discover',
       routes: {
-        '/discover': (context) => DiscoverPage(),
+        '/discover': (context) => makeDiscoverPage(),
       },
     );
   }

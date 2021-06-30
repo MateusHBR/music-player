@@ -13,7 +13,7 @@ class GetMusicsFromCacheStorageSpy extends Mock
 typedef MusicsExpectation = When<Future<List<CacheMusicModel>>>;
 
 void main() {
-  late GetMusicsFromCacheStorageSpy getMusicsCacheStorage;
+  late GetMusicsFromCacheStorageSpy getMusicsFromCacheStorage;
   late LoadMostPlayedMusics sut;
   final loadedMusicsMock = [
     CacheMusicModel(
@@ -31,15 +31,15 @@ void main() {
   ];
 
   setUp(() {
-    getMusicsCacheStorage = GetMusicsFromCacheStorageSpy();
+    getMusicsFromCacheStorage = GetMusicsFromCacheStorageSpy();
 
     sut = LoadMostPlayedMusics(
-      getMusicsCacheStorage: getMusicsCacheStorage,
+      getMusicsFromCacheStorage: getMusicsFromCacheStorage,
     );
   });
 
   MusicsExpectation mockMostPlayedMusics() =>
-      when(() => getMusicsCacheStorage.getMostPlayedCachedMusics());
+      when(() => getMusicsFromCacheStorage.getMostPlayedCachedMusics());
 
   void mockMostPlayerMusicsSuccess() {
     mockMostPlayedMusics().thenAnswer(

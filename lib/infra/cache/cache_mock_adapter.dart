@@ -4,6 +4,7 @@ import 'package:music_player/data/models/cache_music_model.dart';
 class CacheMockAdapter implements GetMusicsFromCacheStorage {
   @override
   Future<List<CacheMusicModel>> getMostPlayedCachedMusics() async {
+    await Future.delayed(Duration(milliseconds: 500));
     return [
       CacheMusicModel(
         bandName: 'Paramore',
@@ -17,11 +18,24 @@ class CacheMockAdapter implements GetMusicsFromCacheStorage {
         imagePath: '/path/DraftPunk/image1',
         musicPath: '/path/DraftPunk/music1',
       ),
+      CacheMusicModel(
+        bandName: 'DMNDS & Fallen Roses',
+        musicName: "Calabria",
+        imagePath: '/path/Paramore/image1',
+        musicPath: '/path/Paramore/music1',
+      ),
+      CacheMusicModel(
+        bandName: 'SAINt JHN',
+        musicName: "Roses",
+        imagePath: '/path/DraftPunk/image1',
+        musicPath: '/path/DraftPunk/music1',
+      ),
     ];
   }
 
   @override
   Future<List<CacheMusicModel>> getRecentMusics() async {
+    await Future.delayed(Duration(milliseconds: 500));
     return [
       CacheMusicModel(
         bandName: 'Paramore',

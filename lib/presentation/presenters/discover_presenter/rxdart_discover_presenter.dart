@@ -1,14 +1,13 @@
+import 'package:music_player/domain/usecases/usecases.dart';
 import 'package:rxdart/rxdart.dart';
-
-import '../../../data/usecases/usecases.dart';
 
 import '../../../domain/helpers/helpers.dart';
 
 import '../../../ui/pages/discover/discover.dart';
 
 class RxDartDiscoverPresenter implements DiscoverPresenter {
-  final LoadMostPlayedMusics loadMostPlayedMusicsUseCase;
-  final LoadRecentPlayedMusics loadRecentPlayedMusicsUseCase;
+  final LoadMusics loadMostPlayedMusicsUseCase;
+  final LoadMusics loadRecentPlayedMusicsUseCase;
 
   RxDartDiscoverPresenter({
     required this.loadMostPlayedMusicsUseCase,

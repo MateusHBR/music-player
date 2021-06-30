@@ -10,26 +10,25 @@ import 'discover_state.dart';
 import 'discover_presenter.dart';
 
 class DiscoverPage extends StatefulWidget {
-  final DiscoverPresenter? presenter;
+  final DiscoverPresenter presenter;
 
-  DiscoverPage({Key? key, this.presenter}) : super(key: key);
-  // DiscoverPage({Key? key, required this.presenter}) : super(key: key);
+  DiscoverPage({Key? key, required this.presenter}) : super(key: key);
 
   @override
   _DiscoverPageState createState() => _DiscoverPageState(this.presenter);
 }
 
 class _DiscoverPageState extends State<DiscoverPage> {
-  final DiscoverPresenter? presenter;
+  final DiscoverPresenter presenter;
 
   _DiscoverPageState(this.presenter);
 
   @override
   void initState() {
     super.initState();
-    presenter?.loadMusics();
+    presenter.loadMusics();
 
-    presenter?.errorMessage.listen((error) {
+    presenter.errorMessage.listen((error) {
       if (error == null || error.isEmpty) {
         return;
       }
@@ -48,7 +47,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
 
   @override
   void dispose() {
-    presenter?.dispose();
+    presenter.dispose();
     super.dispose();
   }
 
@@ -144,7 +143,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
 
     return StreamBuilder<DiscoverState>(
       initialData: DiscoverLoadingState(),
-      stream: presenter?.discoverScreenState,
+      stream: presenter.discoverScreenState,
       builder: (context, snapshot) {
         final currentState = snapshot.data!;
 
@@ -161,10 +160,10 @@ class _DiscoverPageState extends State<DiscoverPage> {
             duration: Duration(milliseconds: 500),
             opacity: isKeyboardVisible ? 0 : 1,
             onEnd: () {
-              presenter?.onEndCurrentOpacityTransition(isKeyboardVisible);
+              presenter.onEndCurrentOpacityTransition(isKeyboardVisible);
             },
             child: StreamBuilder<bool>(
-              stream: presenter?.opacityIsNotDisplayingBody,
+              stream: presenter.opacityIsNotDisplayingBody,
               initialData: false,
               builder: (context, snapshot) {
                 final opacityIsNotDisplayingBody = snapshot.data ?? false;
