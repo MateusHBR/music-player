@@ -4,10 +4,10 @@ import '../../../domain/usecases/usecases.dart';
 
 import '../../cache/cache.dart';
 
-class LoadMostPlayerMusics implements LoadMusics {
+class LoadMostPlayedMusics implements LoadMusics {
   final GetMusicsFromCacheStorage getMusicsCacheStorage;
 
-  LoadMostPlayerMusics({required this.getMusicsCacheStorage});
+  LoadMostPlayedMusics({required this.getMusicsCacheStorage});
 
   @override
   Future<List<MusicEntity>> call() async {

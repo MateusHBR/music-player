@@ -14,7 +14,7 @@ typedef MusicsExpectation = When<Future<List<CacheMusicModel>>>;
 
 void main() {
   late GetMusicsFromCacheStorageSpy getMusicsCacheStorage;
-  late LoadMostPlayerMusics sut;
+  late LoadMostPlayedMusics sut;
   final loadedMusicsMock = [
     CacheMusicModel(
       bandName: 'Paramore',
@@ -33,7 +33,7 @@ void main() {
   setUp(() {
     getMusicsCacheStorage = GetMusicsFromCacheStorageSpy();
 
-    sut = LoadMostPlayerMusics(
+    sut = LoadMostPlayedMusics(
       getMusicsCacheStorage: getMusicsCacheStorage,
     );
   });

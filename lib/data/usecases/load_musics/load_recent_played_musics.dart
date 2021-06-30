@@ -4,10 +4,10 @@ import '../../../domain/helpers/helpers.dart';
 import '../../../domain/entities/music_entity.dart';
 import '../../../domain/usecases/usecases.dart';
 
-class LoadRecentMusics implements LoadMusics {
+class LoadRecentPlayedMusics implements LoadMusics {
   final GetMusicsFromCacheStorage getMusicsFromCacheStorage;
 
-  LoadRecentMusics({
+  LoadRecentPlayedMusics({
     required this.getMusicsFromCacheStorage,
   });
 

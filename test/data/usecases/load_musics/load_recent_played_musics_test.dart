@@ -28,11 +28,11 @@ void main() {
   ];
 
   late GetMusicsFromCacheStorageSpy getMusicsFromCacheStorage;
-  late LoadRecentMusics sut;
+  late LoadRecentPlayedMusics sut;
 
   setUp(() {
     getMusicsFromCacheStorage = GetMusicsFromCacheStorageSpy();
-    sut = LoadRecentMusics(
+    sut = LoadRecentPlayedMusics(
       getMusicsFromCacheStorage: getMusicsFromCacheStorage,
     );
   });
