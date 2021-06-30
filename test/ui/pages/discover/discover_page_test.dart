@@ -206,4 +206,28 @@ void main() {
 
     expect(mostPlayedMusicsItem, findsNWidgets(2));
   });
+
+  testWidgets(
+      'should not present success and loading state itens when state is error',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    discoverScreenStateController.add(
+      DiscoverErrorState(),
+    );
+
+    await tester.pump();
+
+    final circularProgressIndicator = find.byType(CircularProgressIndicator);
+
+    expect(circularProgressIndicator, findsNothing);
+
+    final recentPlayedMusicsItem = find.byType(RecentPlayedMusicItem);
+
+    expect(recentPlayedMusicsItem, findsNothing);
+
+    final mostPlayedMusicsItem = find.byType(MostPlayedMusicItem);
+
+    expect(mostPlayedMusicsItem, findsNothing);
+  });
 }
