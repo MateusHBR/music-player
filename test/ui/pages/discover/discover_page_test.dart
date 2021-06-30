@@ -13,10 +13,12 @@ void main() {
   late DiscoverPresenter presenter;
   late StreamController<bool> opacityIsNotDisplayingBodyController;
   late StreamController<DiscoverState> discoverScreenStateController;
+  late StreamController<String?> errorMessageController;
 
   void initializeStreams() {
     opacityIsNotDisplayingBodyController = StreamController<bool>();
     discoverScreenStateController = StreamController<DiscoverState>();
+    errorMessageController = StreamController<String?>();
   }
 
   void mockStreams() {
@@ -31,11 +33,18 @@ void main() {
     ).thenAnswer(
       (_) => discoverScreenStateController.stream,
     );
+
+    when(
+      () => presenter.errorMessage,
+    ).thenAnswer(
+      (_) => errorMessageController.stream,
+    );
   }
 
   void closeStreams() {
     opacityIsNotDisplayingBodyController.close();
     discoverScreenStateController.close();
+    errorMessageController.close();
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -97,5 +106,18 @@ void main() {
     final mostPlayedMusicItem = find.byType(MostPlayedMusicItem);
 
     expect(mostPlayedMusicItem, findsNothing);
+  });
+
+  testWidgets('should present error message if presenter.errorMessage emits',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    final errorStringTest = 'teste error message';
+
+    errorMessageController.add(errorStringTest);
+
+    await tester.pump();
+
+    expect(find.text(errorStringTest), findsOneWidget);
   });
 }

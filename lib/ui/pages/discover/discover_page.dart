@@ -28,6 +28,14 @@ class _DiscoverPageState extends State<DiscoverPage> {
   void initState() {
     super.initState();
     presenter?.loadMusics();
+
+    presenter?.errorMessage.listen((error) {
+      if (error == null || error.isEmpty) {
+        return;
+      }
+
+      showErrorMessage(context, error);
+    });
   }
 
   void _hideKeyboard() {
