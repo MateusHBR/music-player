@@ -119,5 +119,24 @@ void main() {
     await tester.pump();
 
     expect(find.text(errorStringTest), findsOneWidget);
+    expect(find.byType(SnackBar), findsOneWidget);
+  });
+
+  testWidgets(
+      'should not present error message if presenter.errorMessage emits null or blank',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    errorMessageController.add("");
+
+    await tester.pump();
+
+    expect(find.byType(SnackBar), findsNothing);
+
+    errorMessageController.add(null);
+
+    await tester.pump();
+
+    expect(find.byType(SnackBar), findsNothing);
   });
 }
