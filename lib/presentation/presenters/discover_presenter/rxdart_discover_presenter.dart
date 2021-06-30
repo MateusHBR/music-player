@@ -15,21 +15,23 @@ class RxDartDiscoverPresenter implements DiscoverPresenter {
     required this.loadRecentPlayedMusicsUseCase,
   });
 
-  final _discoverScreenState = BehaviorSubject<DiscoverState>.seeded(
+  final _discoverScreenStateStream = BehaviorSubject<DiscoverState>.seeded(
     DiscoverLoadingState(),
   );
 
+  final _errorMessageStream = BehaviorSubject<String?>();
+
   @override
-  Stream<DiscoverState> get discoverScreenState => _discoverScreenState;
+  Stream<DiscoverState> get discoverScreenState => _discoverScreenStateStream;
 
   @override
   void dispose() {
-    _discoverScreenState.close();
+    _discoverScreenStateStream.close();
+    _errorMessageStream.close();
   }
 
   @override
-  // TODO: implement errorMessage
-  Stream<String?> get errorMessage => throw UnimplementedError();
+  Stream<String?> get errorMessage => _errorMessageStream;
 
   @override
   Future<void> loadMusics() async {
@@ -37,7 +39,8 @@ class RxDartDiscoverPresenter implements DiscoverPresenter {
       await loadRecentPlayedMusicsUseCase();
       await loadMostPlayedMusicsUseCase();
     } on DomainError catch (error) {
-      _discoverScreenState.add(DiscoverErrorState());
+      _discoverScreenStateStream.add(DiscoverErrorState());
+      _errorMessageStream.add(error.message);
     }
   }
 

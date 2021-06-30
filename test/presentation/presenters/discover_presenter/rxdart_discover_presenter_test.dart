@@ -1,13 +1,14 @@
 import 'package:mocktail/mocktail.dart';
-import 'package:music_player/domain/helpers/domain_error.dart';
-import 'package:music_player/ui/pages/discover/discover.dart';
 import 'package:test/test.dart';
 
 import 'package:music_player/data/usecases/usecases.dart';
 
+import 'package:music_player/domain/helpers/helpers.dart';
 import 'package:music_player/domain/entities/entities.dart';
 
 import 'package:music_player/presentation/presenters/presenters.dart';
+
+import 'package:music_player/ui/pages/discover/discover.dart';
 
 class LoadMostPlayedMusicsSpy extends Mock implements LoadMostPlayedMusics {}
 
@@ -127,5 +128,21 @@ void main() {
         },
       ),
     );
+  });
+  test('should emits error message when loadMusics throws', () async {
+    loadRecentPlayedMusicsError();
+    expectLater(
+      sut.errorMessage,
+      emits(DomainError.unexpected.message),
+    );
+    await sut.loadMusics();
+
+    expectLater(
+      sut.errorMessage,
+      emits(DomainError.unexpected.message),
+    );
+    loadRecentPlayedMusicsSuccess();
+    loadMostPlayedMusicsError();
+    await sut.loadMusics();
   });
 }
