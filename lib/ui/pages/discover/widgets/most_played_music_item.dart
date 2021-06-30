@@ -23,8 +23,11 @@ class MostPlayedMusicItem extends StatelessWidget {
         Container(
           height: 160,
           decoration: BoxDecoration(
-            color: Colors.red,
             borderRadius: BorderRadius.circular(8),
+            image: DecorationImage(
+              image: AssetImage(imagePath),
+              fit: BoxFit.cover,
+            ),
           ),
         ),
         const VerticalSpacing(8),

@@ -23,7 +23,12 @@ class RecentPlayedMusicItem extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            color: Colors.red,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(imagePath),
+                fit: BoxFit.cover,
+              ),
+            ),
             child: Material(
               color: Colors.transparent,
               child: InkWell(
