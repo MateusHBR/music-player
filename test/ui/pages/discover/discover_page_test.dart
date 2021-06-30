@@ -140,6 +140,13 @@ void main() {
     expect(find.byType(SnackBar), findsNothing);
   });
 
+  testWidgets('should call loadMusics on initState',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    verify(() => presenter.loadMusics()).called(1);
+  });
+
   testWidgets('should close streams on dispose', (WidgetTester tester) async {
     await loadPage(tester);
 
