@@ -19,15 +19,19 @@ class RxDartDiscoverPresenter implements DiscoverPresenter {
     DiscoverLoadingState(),
   );
 
-  final _errorMessageStream = BehaviorSubject<String?>();
+  final _errorMessageStream = PublishSubject<String?>();
+
+  final _opacityIsNotDisplayingBodyStream = PublishSubject<bool>();
 
   @override
-  Stream<DiscoverState> get discoverScreenState => _discoverScreenStateStream;
+  Stream<DiscoverState> get discoverScreenState =>
+      _discoverScreenStateStream.distinct();
 
   @override
   void dispose() {
     _discoverScreenStateStream.close();
     _errorMessageStream.close();
+    _opacityIsNotDisplayingBodyStream.close();
   }
 
   @override
@@ -35,9 +39,17 @@ class RxDartDiscoverPresenter implements DiscoverPresenter {
 
   @override
   Future<void> loadMusics() async {
+    _discoverScreenStateStream.add(DiscoverLoadingState());
     try {
-      await loadRecentPlayedMusicsUseCase();
-      await loadMostPlayedMusicsUseCase();
+      final listOfRecentPlayedMusics = await loadRecentPlayedMusicsUseCase();
+      final listOfMostPlayedMusics = await loadMostPlayedMusicsUseCase();
+
+      _discoverScreenStateStream.add(
+        DiscoverSuccessState(
+          listOfMostPlayedMusics: listOfMostPlayedMusics,
+          listOfRecentPlayedMusics: listOfRecentPlayedMusics,
+        ),
+      );
     } on DomainError catch (error) {
       _discoverScreenStateStream.add(DiscoverErrorState());
       _errorMessageStream.add(error.message);

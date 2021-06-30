@@ -153,7 +153,8 @@ class _DiscoverPageState extends State<DiscoverPage> {
         }
 
         if (currentState is DiscoverSuccessState) {
-          final listOfRecentPlayedMusics = currentState.listOfRecentMusics;
+          final listOfRecentPlayedMusics =
+              currentState.listOfRecentPlayedMusics;
           final listOfMostPlayedMusics = currentState.listOfMostPlayedMusics;
 
           return AnimatedOpacity(

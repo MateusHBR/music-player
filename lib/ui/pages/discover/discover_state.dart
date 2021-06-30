@@ -1,17 +1,26 @@
+import 'package:equatable/equatable.dart';
+
 import '../../../domain/entities/entities.dart';
 
 abstract class DiscoverState {}
 
-class DiscoverSuccessState implements DiscoverState {
-  final List<MusicEntity> listOfRecentMusics;
+class DiscoverSuccessState extends Equatable implements DiscoverState {
+  final List<MusicEntity> listOfRecentPlayedMusics;
   final List<MusicEntity> listOfMostPlayedMusics;
 
   DiscoverSuccessState({
     required this.listOfMostPlayedMusics,
-    required this.listOfRecentMusics,
+    required this.listOfRecentPlayedMusics,
   });
+
+  @override
+  List<Object?> get props => [listOfMostPlayedMusics, listOfRecentPlayedMusics];
 }
 
-class DiscoverLoadingState implements DiscoverState {}
+class DiscoverLoadingState extends Equatable implements DiscoverState {
+  List<Object?> get props => [];
+}
 
-class DiscoverErrorState implements DiscoverState {}
+class DiscoverErrorState extends Equatable implements DiscoverState {
+  List<Object?> get props => [];
+}

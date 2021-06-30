@@ -188,7 +188,7 @@ void main() {
     discoverScreenStateController.add(
       DiscoverSuccessState(
         listOfMostPlayedMusics: listOfMostPlayed,
-        listOfRecentMusics: listOfRecentPlayed,
+        listOfRecentPlayedMusics: listOfRecentPlayed,
       ),
     );
 

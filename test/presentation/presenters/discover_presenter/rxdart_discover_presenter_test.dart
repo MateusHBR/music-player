@@ -100,17 +100,15 @@ void main() {
       () async {
     loadMostPlayedMusicsError();
 
-    await sut.loadMusics();
-
-    sut.discoverScreenState.listen(
-      expectAsync1(
-        (newState) {
-          final currentStateIsError = newState is DiscoverErrorState;
-
-          expect(currentStateIsError, true);
-        },
-      ),
+    expectLater(
+      sut.discoverScreenState,
+      emitsInOrder([
+        DiscoverLoadingState(),
+        DiscoverErrorState(),
+      ]),
     );
+
+    await sut.loadMusics();
   });
   test(
       'should emits error state and error message when loadRecentPlayedMusicsUseCase throws',
@@ -143,6 +141,22 @@ void main() {
     );
     loadRecentPlayedMusicsSuccess();
     loadMostPlayedMusicsError();
+    await sut.loadMusics();
+  });
+
+  test('should emits Success state with correct values when loadMusics finish',
+      () async {
+    expectLater(
+      sut.discoverScreenState,
+      emitsInOrder([
+        DiscoverLoadingState(),
+        DiscoverSuccessState(
+          listOfMostPlayedMusics: listOfMostPlayedMusicsMock,
+          listOfRecentPlayedMusics: listOfRecentPlayedMusicsMock,
+        ),
+      ]),
+    );
+
     await sut.loadMusics();
   });
 }
