@@ -165,13 +165,13 @@ void main() {
       MusicEntity(
         bandName: 'Paramore',
         musicName: "Ain't Fun",
-        imagePath: '/path/Paramore/image1',
+        imagePath: 'lib/ui/assets/images/aint_fun.png',
         musicPath: '/path/Paramore/music1',
       ),
       MusicEntity(
         bandName: 'Draft Punk',
         musicName: "Get Lucky",
-        imagePath: '/path/DraftPunk/image1',
+        imagePath: 'lib/ui/assets/images/aint_fun.png',
         musicPath: '/path/DraftPunk/music1',
       ),
     ];
@@ -180,7 +180,7 @@ void main() {
       MusicEntity(
         bandName: 'Paramore',
         musicName: "Ain't Fun",
-        imagePath: '/path/Paramore/image1',
+        imagePath: 'lib/ui/assets/images/aint_fun.png',
         musicPath: '/path/Paramore/music1',
       ),
     ];
