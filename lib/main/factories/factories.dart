@@ -1,4 +1,4 @@
-export 'pages/discover/discover.dart';
+export 'pages/pages.dart';
 
 export 'usecases/usecases.dart';
 

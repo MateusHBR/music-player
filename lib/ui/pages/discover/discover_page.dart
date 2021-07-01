@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../domain/entities/entities.dart';
 
 import '../../values/values.dart';
 import '../../widgets/widgets.dart';
+
+import '../music_player/music_player.dart';
 
 import 'widgets/widgets.dart';
 import 'discover_state.dart';
@@ -49,6 +52,24 @@ class _DiscoverPageState extends State<DiscoverPage> {
   void dispose() {
     presenter.dispose();
     super.dispose();
+  }
+
+  Future<void> showCustomDialog(BuildContext context, MusicEntity music) async {
+    await showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierColor: Colors.black.withOpacity(0.4),
+      useRootNavigator: true,
+      routeSettings: RouteSettings(name: '/music_player'),
+      barrierLabel: '',
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return MusicPlayerPage(
+          music: music,
+          presenter: Provider.of<MusicPlayerPresenter>(this.context),
+        );
+      },
+    );
+    // transitionDuration:);
   }
 
   @override
@@ -146,10 +167,9 @@ class _DiscoverPageState extends State<DiscoverPage> {
     }
 
     return StreamBuilder<DiscoverState>(
-      initialData: DiscoverLoadingState(),
       stream: presenter.discoverScreenState,
       builder: (context, snapshot) {
-        final currentState = snapshot.data!;
+        final currentState = snapshot.data;
 
         if (currentState is DiscoverErrorState || snapshot.hasError) {
           return Container(); // TODO: implements error screen
@@ -223,9 +243,10 @@ class _DiscoverPageState extends State<DiscoverPage> {
             imagePath: currentMusic.imagePath,
             musicName: currentMusic.musicName,
             bandName: currentMusic.bandName,
-            onLongPressed: () {
-              print('called');
-            },
+            onLongPressed: () => showCustomDialog(
+              context,
+              currentMusic,
+            ),
           );
         },
       ),
