@@ -231,20 +231,31 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
           size: 12,
           color: values.KColors.white.withOpacity(0.38),
         ),
-        Flexible(
-          child: Slider(
-            value: 0.5,
-            onChanged: (_) {},
-            inactiveColor: values.KColors.white.withOpacity(0.38),
-            activeColor: values.KColors.white,
-          ),
-        ),
+        Flexible(child: _volumeSlider()),
         Icon(
           Icons.volume_up,
           size: 12,
           color: values.KColors.white.withOpacity(0.38),
         ),
       ],
+    );
+  }
+
+  Widget _volumeSlider() {
+    return StreamBuilder<double>(
+      stream: presenter.volume,
+      initialData: 1.0,
+      builder: (context, snapshot) {
+        final volume = snapshot.data!;
+        print(volume);
+        return Slider(
+          max: 2,
+          value: volume,
+          onChanged: presenter.onVolumeChanged,
+          inactiveColor: values.KColors.white.withOpacity(0.38),
+          activeColor: values.KColors.white,
+        );
+      },
     );
   }
 }

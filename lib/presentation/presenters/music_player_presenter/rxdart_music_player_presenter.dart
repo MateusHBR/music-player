@@ -7,6 +7,18 @@ class RxDartMusicPlayerPresenter implements MusicPlayerPresenter {
   AudioPlayer? _audioPlayer;
 
   @override
+  Stream<MusicPlayerState> get stateOfSongThatIsPlaying =>
+      _audioPlayer!.playerStateStream
+          .map(
+            (audioPlayerEvent) =>
+                MusicPlayerState.fromJustAudiio(audioPlayerEvent),
+          )
+          .distinct();
+
+  @override
+  Stream<double> get volume => _audioPlayer!.volumeStream;
+
+  @override
   void initState(String musicPath) {
     _audioPlayer = AudioPlayer();
 
@@ -38,11 +50,7 @@ class RxDartMusicPlayerPresenter implements MusicPlayerPresenter {
   }
 
   @override
-  Stream<MusicPlayerState> get stateOfSongThatIsPlaying =>
-      _audioPlayer!.playerStateStream
-          .map(
-            (audioPlayerEvent) =>
-                MusicPlayerState.fromJustAudiio(audioPlayerEvent),
-          )
-          .distinct();
+  Future<void> onVolumeChanged(double newVolume) async {
+    await _audioPlayer!.setVolume(newVolume);
+  }
 }
