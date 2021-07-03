@@ -119,12 +119,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
                 const VerticalSpacing(27),
                 _musicNameAndBand(),
                 const VerticalSpacing(26),
-                Slider(
-                  value: 0.5,
-                  onChanged: (_) {},
-                  inactiveColor: values.KColors.white.withOpacity(0.38),
-                  activeColor: values.KColors.white,
-                ),
+                _musicProgressBar(),
                 const VerticalSpacing(22),
                 _musicPayerActions(),
                 const VerticalSpacing(22),
@@ -153,6 +148,56 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
     );
   }
 
+  Widget _musicProgressBar() {
+    return Column(
+      children: [
+        StreamBuilder<Duration>(
+            stream: presenter.currentPositionAtMusicStream,
+            initialData: Duration.zero,
+            builder: (context, snapshot) {
+              final currentPositionInSeconds =
+                  snapshot.data!.inSeconds.toDouble();
+
+              return Slider(
+                value: currentPositionInSeconds,
+                max: presenter.musicDurationInSeconds.toDouble(),
+                onChanged: (_) {},
+                inactiveColor: values.KColors.white.withOpacity(0.38),
+                activeColor: values.KColors.white,
+              );
+            }),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            StreamBuilder<Duration>(
+              stream: presenter.currentPositionAtMusicStream,
+              initialData: Duration.zero,
+              builder: (context, snapshot) {
+                final currentPositionAtMusicTime = snapshot.data!;
+                return Text(
+                  currentPositionAtMusicTime.inSeconds.toString(),
+                  style: values.TextStyles.caption(),
+                );
+              },
+            ),
+            StreamBuilder<Duration>(
+              stream: presenter.musicDurationStream,
+              initialData: Duration.zero,
+              builder: (context, snapshot) {
+                final musicDuration = snapshot.data!;
+
+                return Text(
+                  musicDuration.inSeconds.toString(),
+                  style: values.TextStyles.caption(),
+                );
+              },
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
   Widget _musicPayerActions() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -176,7 +221,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
 
   Widget _playButton() {
     return StreamBuilder<MusicPlayerState>(
-      stream: presenter.stateOfSongThatIsPlaying,
+      stream: presenter.stateOfSongThatIsPlayingStream,
       builder: (context, snapshot) {
         final playerState = snapshot.data ?? MusicPlayerState.initial();
 
@@ -243,7 +288,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
 
   Widget _volumeSlider() {
     return StreamBuilder<double>(
-      stream: presenter.volume,
+      stream: presenter.volumeStream,
       initialData: 1.0,
       builder: (context, snapshot) {
         final volume = snapshot.data!;

@@ -1,8 +1,11 @@
 import 'package:music_player/ui/models/states/states.dart';
 
 abstract class MusicPlayerPresenter {
-  Stream<MusicPlayerState> get stateOfSongThatIsPlaying;
-  Stream<double> get volume;
+  Stream<MusicPlayerState> get stateOfSongThatIsPlayingStream;
+  Stream<double> get volumeStream;
+  Stream<Duration> get musicDurationStream;
+  double get musicDurationInSeconds;
+  Stream<Duration> get currentPositionAtMusicStream;
 
   void initState(String musicPath);
   void dispose();
