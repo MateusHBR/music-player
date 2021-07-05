@@ -1,16 +1,38 @@
-# music_player
+# Music Player
 
-A new Flutter project.
+## Sobre
+O Music player é um player de música que visa apresentar os conhecimentos em um pequeno teste.
+O Projeto não foi finalizado, faltaram alguns ajustes visuais e testes.
 
-## Getting Started
+>## Conhecimentos utilizados
 
-This project is a starting point for a Flutter application.
+- Flutter;
+- Clean Architecture;
+- Testes unitários e de Widget;
+- RxDart para controle de estado;
 
-A few resources to get you started if this is your first Flutter project:
+<br/>
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+>## Clonando repositório
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```
+	$ git clone https://github.com/MateusHBR/music-player.git
+		
+	# Acesse a pasta do projeto
+	
+	$ cd music_player
+```
+<br/>
+
+>## Execução de testes
+
+```
+  $ flutter test
+```
+<br/>
+
+>## Execução do projeto
+
+```
+  $ flutter run lib/main/main.dart
+```
