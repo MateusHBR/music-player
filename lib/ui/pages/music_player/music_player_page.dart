@@ -64,7 +64,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
           topRight: Radius.circular(24),
         ),
         child: Material(
-          color: Colors.transparent,
+          color: values.KColors.blue,
           child: Container(
             height: double.maxFinite,
             width: double.maxFinite,
@@ -111,9 +111,9 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
           bottomRight: Radius.circular(24),
         ),
         child: Material(
+          color: values.KColors.blue,
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 16),
-            color: values.KColors.blue,
             child: Column(
               children: [
                 const VerticalSpacing(27),
@@ -152,20 +152,29 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
     return Column(
       children: [
         StreamBuilder<Duration>(
-            stream: presenter.currentPositionAtMusicStream,
-            initialData: Duration.zero,
-            builder: (context, snapshot) {
-              final currentPositionInSeconds =
-                  snapshot.data!.inSeconds.toDouble();
+          stream: presenter.currentPositionAtMusicStream,
+          initialData: Duration.zero,
+          builder: (context, snapshot) {
+            var actualMusicPositionInSeconds =
+                snapshot.data!.inSeconds.toDouble();
 
-              return Slider(
-                value: currentPositionInSeconds,
-                max: presenter.musicDurationInSeconds.toDouble(),
-                onChanged: (_) {},
-                inactiveColor: values.KColors.white.withOpacity(0.38),
-                activeColor: values.KColors.white,
-              );
-            }),
+            final musicDurationInSeconds = presenter.musicDurationInSeconds;
+
+            if (actualMusicPositionInSeconds > musicDurationInSeconds) {
+              actualMusicPositionInSeconds = musicDurationInSeconds;
+            }
+
+            return Slider(
+              value: actualMusicPositionInSeconds,
+              max: musicDurationInSeconds,
+              onChanged: (musicTime) async => presenter.changeMusicTime(
+                musicTime.toInt(),
+              ),
+              inactiveColor: values.KColors.white.withOpacity(0.38),
+              activeColor: values.KColors.white,
+            );
+          },
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -224,12 +233,6 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
       stream: presenter.stateOfSongThatIsPlayingStream,
       builder: (context, snapshot) {
         final playerState = snapshot.data ?? MusicPlayerState.initial();
-
-        if (playerState.status.isInitializing) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
 
         if (!playerState.playing) {
           return IconButton(
@@ -292,9 +295,9 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
       initialData: 1.0,
       builder: (context, snapshot) {
         final volume = snapshot.data!;
-        print(volume);
+
         return Slider(
-          max: 2,
+          max: 1,
           value: volume,
           onChanged: presenter.onVolumeChanged,
           inactiveColor: values.KColors.white.withOpacity(0.38),

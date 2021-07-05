@@ -36,7 +36,7 @@ class RxDartMusicPlayerPresenter implements MusicPlayerPresenter {
       _audioPlayer!.positionStream;
 
   @override
-  void initState(String musicPath) {
+  void initState(String musicPath) async {
     _audioPlayer = AudioPlayer();
 
     _audioPlayer!.setAsset(musicPath);
@@ -69,5 +69,13 @@ class RxDartMusicPlayerPresenter implements MusicPlayerPresenter {
   @override
   Future<void> onVolumeChanged(double newVolume) async {
     await _audioPlayer!.setVolume(newVolume);
+  }
+
+  @override
+  Future<void> changeMusicTime(int seconds) async {
+    _audioPlayer!.seek(
+      Duration(seconds: seconds),
+      index: _audioPlayer!.effectiveIndices!.first,
+    );
   }
 }

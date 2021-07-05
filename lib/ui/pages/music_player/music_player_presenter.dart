@@ -13,4 +13,5 @@ abstract class MusicPlayerPresenter {
   Future<void> pause();
   Future<void> replay();
   Future<void> onVolumeChanged(double newVolume);
+  Future<void> changeMusicTime(int seconds);
 }
